@@ -7,10 +7,10 @@ All entities need a validation power, that is, every time an entity is created, 
 import Address from "./address"
 
 export default class Customer {
-    _id: string
-    _name: string
-    _address!: Address
-    _active: boolean = true
+    private _id: string
+    private _name: string
+    private _address!: Address
+    private _active: boolean = true
 
     constructor(id: string, name: string){
         this._id = id
