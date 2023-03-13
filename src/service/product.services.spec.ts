@@ -1,4 +1,7 @@
+import Customer from "../entity/customer"
+import OrderItem from "../entity/order_item"
 import Product from "../entity/product"
+import OrderService from "./order.service"
 import ProductService from "./product.service"
 
 describe("Product service unit", () => {
@@ -13,5 +16,5 @@ describe("Product service unit", () => {
         expect(product1.price).toBe(20)
         expect(product2.price).toBe(20)
         expect(product3.price).toBe(8)
-    })
+    })    
 })
