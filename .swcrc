@@ -1,7 +1,7 @@
 {
-    "jsc": {
+    "jsc" : {
         "parser": {
-            "sintax": "typescript",
+            "syntax": "typescript",
             "decorators": true
         },
         "transform": {
