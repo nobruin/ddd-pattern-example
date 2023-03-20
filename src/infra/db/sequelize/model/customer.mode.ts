@@ -13,5 +13,20 @@ export default class CustomerModel extends Model{
     declare name: string
 
     @Column({allowNull: false})
-    declare price: number    
+    declare zipcode: string    
+
+    @Column({allowNull: false})
+    declare street: string
+
+    @Column({allowNull: false})
+    declare number: number
+
+    @Column({allowNull: false})
+    declare city: string
+
+    @Column({allowNull: false})
+    declare active: boolean
+    
+    @Column({allowNull: false})
+    declare rewardPoints:number    
 }

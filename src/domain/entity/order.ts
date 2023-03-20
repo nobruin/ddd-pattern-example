@@ -25,7 +25,7 @@ export default class Order {
         if(this._items.length <= 0){
             throw new Error("Items are required")
         }        
-        if (this._items.some((item) => item.quantity <= 0)) {
+        if (this._items.some((item) => item.qtd <= 0)) {
             throw new Error("Quantity must be greater than 0");
         }
         return true
@@ -38,4 +38,10 @@ export default class Order {
     }
 
     get total():number {return this._total}
+
+    get id(): string {return this._id}
+
+    get customerId(): string {return this._customerId}
+    
+    get items(): OrderItem[] { return this._items }    
 }

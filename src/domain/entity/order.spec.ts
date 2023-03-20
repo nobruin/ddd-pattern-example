@@ -9,7 +9,7 @@ describe("Order unit tests", ()=> {
         }).toThrowError("Id is required")
     })
 
-    it("Should throw error when CustomerId is empty", () => {
+    it("Should throw error when ProductId is empty", () => {
         expect(() => {
             let order = new Order("123", "", [])
         }).toThrowError("CustomerId is required")
