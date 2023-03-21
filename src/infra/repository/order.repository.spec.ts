@@ -82,4 +82,105 @@ describe("Order repository test", () => {
       ],
     })
   })
+
+  it("should throw an error when order update is not found", async () => {
+    const orderRepository = new OrderRepository()
+    const item = new OrderItem("1", "1", "i1", 10, 1)
+    const order = new Order("1", "1", [item])
+    
+    expect(async () => {      
+      await orderRepository.update(order)
+    }).rejects.toThrow("Update order failed")
+  })
+
+
+  it("should update a order", async () => {
+    const customerRepository = new CustomerRepository()
+    const customer = new Customer("123", "Customer 1")
+    const address = new Address("Street 1", 1, "Zipcode 1", "City 1")
+    customer.changeAddress(address)
+    await customerRepository.create(customer)
+
+    const productRepository = new ProductRepository()
+    const product = new Product("123", "Product 1", 10)
+    await productRepository.create(product)
+
+    const orderItem = new OrderItem(
+      "1",
+      product.id,
+      product.name,
+      product.price,      
+      2
+    )
+
+    const order = new Order("123", "123", [orderItem])
+
+    const orderRepository = new OrderRepository()
+    await orderRepository.create(order)
+
+    const orderModel = await OrderModel.findOne({
+      where: { id: order.id },
+      include: ["items"],
+    })
+
+    expect(orderModel.toJSON()).toStrictEqual({
+      id: "123",
+      customerId: "123",
+      total: order.total,
+      items: [
+        {
+          id: orderItem.id,
+          name: orderItem.name,
+          price: orderItem.price,
+          qtd: orderItem.qtd,
+          orderId: "123",
+          productId: "123",
+          total: orderItem.total
+        },
+      ],
+    })
+
+    const customer2 = new Customer("12", "Customer 2")
+    const orderItem2 = new OrderItem(
+      "2",
+      product.id,
+      product.name,
+      product.price,      
+      3
+    )
+    order.addItems([orderItem2])
+
+    await orderRepository.update(order)
+
+    const orderModel2 = await OrderModel.findOne({
+      where: { id: order.id },
+      include: ["items"],
+    })
+    
+    expect(orderModel2.toJSON()).toStrictEqual({
+      id: "123",
+      customerId: "123",
+      total: order.total,
+      items: [
+        {
+          id: orderItem.id,
+          name: orderItem.name,
+          price: orderItem.price,
+          qtd: orderItem.qtd,
+          orderId: "123",
+          productId: "123",
+          total: orderItem.total
+        },
+        {
+          id: orderItem2.id,
+          name: orderItem2.name,
+          price: orderItem2.price,
+          qtd: orderItem2.qtd,
+          orderId: "123",
+          productId: "123",
+          total: orderItem2.total
+        },
+      ],
+    })
+  })
 })
