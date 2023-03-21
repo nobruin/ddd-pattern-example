@@ -1,0 +1,8 @@
+#docker 
+.devcontainer
+#nodejs
+/node_modules
+
+#ides
+.idea
+.vscode

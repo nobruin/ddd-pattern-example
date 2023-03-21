@@ -7,16 +7,19 @@ All entities need a validation power, that is, every time an entity is created, 
 import Address from "./address"
 
 export default class Customer {
-    _id: string
-    _name: string
-    _address!: Address
-    _active: boolean = true
+    private _id: string
+    private _name: string
+    private _address!: Address
+    private _active: boolean = true
+    private _rewardPoints:number = 0
 
     constructor(id: string, name: string){
         this._id = id
-        this._name = name        
+        this._name = name
         this.validate()
     }
+
+    get id(): string { return this._id}
 
     validate(){
         if(this._name.length === 0){
@@ -49,6 +52,12 @@ export default class Customer {
     desactivate(){
         this._active = false
     }    
+
+    addRewardPoints(points: number){
+        this._rewardPoints += points
+    }
+
+    get rewardPoints():number {return this._rewardPoints}
 
     get name(): string{ return this._name }
     get address(): Address {return this._address}
