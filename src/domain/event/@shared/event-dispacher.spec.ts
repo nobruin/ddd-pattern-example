@@ -1,3 +1,5 @@
+import sendLog1WhenCustomerIsCreated from "../customer/handler/send-log1-when-product-is-created.handler copy"
+import sendLog2WhenCustomerIsCreated from "../customer/handler/send-log2-when-product-is-created.handler"
 import SendEmailWhenProductIsCreateHandler from "../product/handler/send-email-when-product-is-created.handler"
 import ProductCreatedEvent from "../product/product-created.event"
 import EventDispacher from "./event-dispacher"
@@ -62,7 +64,29 @@ describe("Domain events tests", () => {
             })
 
         eventDispacher.notify(productCreatedEvent)
-        expect(spyEventHandler).toHaveBeenCalled()        
+        expect(spyEventHandler).toHaveBeenCalled()          
+    })    
+
+    it("should register an customer event handler ", () =>{
+
+        const eventCustomerName1 = "CustomerCreatedEvent1"
+        const eventCustomerName2 = "CustomerCreatedEvent2"
+        const eventDispacher = new EventDispacher()
+        const eventCustomerHander1 = new sendLog1WhenCustomerIsCreated()
+        const eventCustomerHander2 = new sendLog2WhenCustomerIsCreated()
+
+        eventDispacher.register(eventCustomerName1, eventCustomerHander1)
+        eventDispacher.register(eventCustomerName2, eventCustomerHander2)
+
+        expect(eventDispacher.getEventHandlers[eventCustomerName1]).toBeDefined()
+        expect(eventDispacher.getEventHandlers[eventCustomerName1].length).toBe(1)
+        expect(eventDispacher.getEventHandlers[eventCustomerName1][0])
+        .toMatchObject(eventCustomerHander1) 
+
+        expect(eventDispacher.getEventHandlers[eventCustomerName2]).toBeDefined()
+        expect(eventDispacher.getEventHandlers[eventCustomerName2].length).toBe(1)
+        expect(eventDispacher.getEventHandlers[eventCustomerName2][0])
+        .toMatchObject(eventCustomerHander2) 
     })
 
 })
