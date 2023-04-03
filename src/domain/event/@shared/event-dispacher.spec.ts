@@ -160,7 +160,7 @@ describe("Domain events tests", () => {
         expect(spyEventHandler2).toHaveBeenCalled()
     })
 
-    it("111should nofify all an Address is Changed event handlers", () =>{
+    it("should nofify all an Address is Changed event handlers", () =>{
         const eventName = "AddressChangedEvent"        
         const eventDispacher = new EventDispacher()        
         const eventHander = new SendLogWhenAddressIsChanged()
@@ -173,9 +173,9 @@ describe("Domain events tests", () => {
         let address = new Address("Street 1", 1, "89028198", "sorocaba")
         customer.changeAddress(address)
 
-        const customerCreatedEvent = new AddressChangedEvent({customer: customer})
+        const addressChangedEvent = new AddressChangedEvent({customer: customer})
 
-        eventDispacher.notify(customerCreatedEvent)
+        eventDispacher.notify(addressChangedEvent)
         expect(spyEventHandler).toHaveBeenCalled()
     })
 
