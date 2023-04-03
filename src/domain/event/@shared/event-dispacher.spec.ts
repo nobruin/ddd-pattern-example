@@ -1,11 +1,13 @@
 import Address from "../../entity/address"
 import Customer from "../../entity/customer"
 import CustomerCreatedEvent from "../customer/customer-created.event"
-import SendLog1WhenCustomerIsCreated from "../customer/handler/send-log1-when-product-is-created.handler copy"
-import SendLog2WhenCustomerIsCreated from "../customer/handler/send-log2-when-product-is-created.handler"
+import SendLog1WhenCustomerIsCreated from "../customer/handler/send-log1-when-customer-is-created.handler"
+import SendLog2WhenCustomerIsCreated from "../customer/handler/send-log-when-Address-is-changed.handler"
 import SendEmailWhenProductIsCreateHandler from "../product/handler/send-email-when-product-is-created.handler"
 import ProductCreatedEvent from "../product/product-created.event"
 import EventDispacher from "./event-dispacher"
+import SendLogWhenAddressIsChanged from "../customer/handler/send-log-when-Address-is-changed.handler"
+import AddressChangedEvent from "../customer/address-changed.event"
 
 describe("Domain events tests", () => {
     it("should register an event handler ", () =>{
@@ -70,7 +72,7 @@ describe("Domain events tests", () => {
         expect(spyEventHandler).toHaveBeenCalled()          
     })    
 
-    it("should register an customer event handler ", () =>{
+    it("should register a customer event handler ", () =>{
 
         const eventCustomerName1 = "CustomerCreatedEvent1"
         const eventCustomerName2 = "CustomerCreatedEvent2"
@@ -92,7 +94,7 @@ describe("Domain events tests", () => {
         .toMatchObject(eventCustomerHander2) 
     })
 
-    it("should unregister an customer event handler ", () =>{
+    it("should unregister a customer event handler ", () =>{
         const eventCustomerName1 = "CustomerCreatedEvent1"
         const eventCustomerName2 = "CustomerCreatedEvent2"
         const eventDispacher = new EventDispacher()
@@ -136,42 +138,45 @@ describe("Domain events tests", () => {
     })
 
 
-    it("should nofify all an customer event handlers ", () =>{
-        const eventName = "CustomerCreatedEvent"
-        const eventDispacher = new EventDispacher()
-        const eventHander = new SendLog1WhenCustomerIsCreated()
-        const spyEventHandler = jest.spyOn(eventHander, "handle")
+    it("should nofify all a customer created event handlers", () =>{
+        const eventName = "CustomerCreatedEvent"        
+        const eventDispacher = new EventDispacher()        
+        const eventHander1 = new SendLog1WhenCustomerIsCreated()
+        const eventHander2 = new SendLog2WhenCustomerIsCreated()
+        const spyEventHandler1 = jest.spyOn(eventHander1, "handle")
+        const spyEventHandler2 = jest.spyOn(eventHander2, "handle")
 
-        eventDispacher.register(eventName, eventHander)
+        eventDispacher.register(eventName, eventHander1)
+        eventDispacher.register(eventName, eventHander2)
 
-        expect(eventDispacher.getEventHandlers[eventName]).toBeDefined()
+        expect(eventDispacher.getEventHandlers[eventName]).toBeDefined()        
+
         let customer = new Customer("c1", "Customer da Silva")
-        let address = new Address("Street 1", 1, "89028198", "sorocaba")
-        customer.changeAddress(address)
 
         const customerCreatedEvent = new CustomerCreatedEvent({customer: customer})
 
-        eventDispacher.notify(customerCreatedEvent)
-        expect(spyEventHandler).toHaveBeenCalled()          
+        eventDispacher.notify(customerCreatedEvent)                
+        expect(spyEventHandler1).toHaveBeenCalled()
+        expect(spyEventHandler2).toHaveBeenCalled()
     })
 
-    it("should nofify all an customer event handlers ", () =>{
-        const eventName = "CustomerCreatedEvent"
-        const eventDispacher = new EventDispacher()
-        const eventHander = new SendLog2WhenCustomerIsCreated()
+    it("should nofify all an Address is Changed event handlers", () =>{
+        const eventName = "AddressChangedEvent"        
+        const eventDispacher = new EventDispacher()        
+        const eventHander = new SendLogWhenAddressIsChanged()
         const spyEventHandler = jest.spyOn(eventHander, "handle")
 
         eventDispacher.register(eventName, eventHander)
-
+        
         expect(eventDispacher.getEventHandlers[eventName]).toBeDefined()
         let customer = new Customer("c1", "Customer da Silva")
         let address = new Address("Street 1", 1, "89028198", "sorocaba")
         customer.changeAddress(address)
 
-        const customerCreatedEvent = new CustomerCreatedEvent({customer: customer})
+        const addressChangedEvent = new AddressChangedEvent({customer: customer})
 
-        eventDispacher.notify(customerCreatedEvent)
-        expect(spyEventHandler).toHaveBeenCalled()          
+        eventDispacher.notify(addressChangedEvent)
+        expect(spyEventHandler).toHaveBeenCalled()
     })
 
 })    
