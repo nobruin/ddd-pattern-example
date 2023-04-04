@@ -9,7 +9,7 @@ implements EventHandlerInterface<AddressChangedEvent>{
         const {id, name, address} = event.eventData.customer as Customer
         console.log(`Handler2:sendLog2WhenAddressIsChanged:This is the console.log for the event: AddressChanged`)
         console.log(`****************`)
-        console.log(`Address of Client: ${id}, ${name} update to ${address}`)
+        console.log(`Address of Client: ${id}, ${name} updated to ${address}`)
         console.log(`****************`)
     }
 }
