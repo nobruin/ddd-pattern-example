@@ -1,6 +1,6 @@
 import ProductInterface from "./product-interface"
 
-export default class Product implements ProductInterface {
+export default class ProductB implements ProductInterface {
     private _id: string
     private _name: string
     private _price: number
@@ -8,7 +8,7 @@ export default class Product implements ProductInterface {
     constructor(id: string, name: string, price: number) {
         this._id = id
         this._name = name
-        this._price = price
+        this.changePrice(price)
         this.validate()
     }
 
@@ -36,7 +36,7 @@ export default class Product implements ProductInterface {
     }    
 
     changePrice(price: number): void{
-        this._price = price
+        this._price = price + 1
         this.validate()
     }
 }
